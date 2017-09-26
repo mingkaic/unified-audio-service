@@ -4,5 +4,5 @@ module.exports = new SchemaObject({
 	"id": String,
 	"source": String,
 	"title": String,
-	"audio": Object,
+	"audio": 'any',
 });

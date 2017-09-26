@@ -1,7 +1,7 @@
 const ytdl = require('ytdl-core');
 const ffmpeg = require('fluent-ffmpeg');
 
-var AudioModel = require('../models/audio_model');
+const AudioModel = require('../models/audio_model');
 
 const source = ".youtube";
 const ytSetting = {
@@ -22,7 +22,7 @@ module.exports = (local_query, query) => {
 	// search local db
 	return local_query(id)
 	.then((docs) => {
-		if (docs.length === 0) {
+		if (docs.length > 0) {
 			var doc = docs[0];
 			return [new AudioModel({
 				"id": doc.id,
@@ -33,22 +33,32 @@ module.exports = (local_query, query) => {
 		}
 		
 		const requestUrl = 'http://www.youtube.com/watch?v=' + id;
-		var video = ytdl(requestUrl, {
-			"filter": (format) => {
-				return format.container === ytSetting.vidFormat && format.audioEncoding;
-			},
-			"quality": ytSetting.quality
-		});
-		var astream = ffmpeg(video).format(ytSetting.audioFormat);
-		return ytdl.getInfo(requestUrl)
-		.then((err, info) => {
-			if (err) throw err;
-			return [new AudioModel({
-				"id": id, 
-				"title": info.title,
-				"audio": astream, 
-				"source": source
-			})];
+		return new Promise((resolve, reject) => {
+			ytdl.getInfo(requestUrl, (err, info) => {
+				if (err) {
+					console.log(err);
+					reject(err);
+				}
+				else {
+					var fs = require('fs');
+					var video = ytdl('https://www.youtube.com/watch?v=3tmd-ClpJxA', {
+						"filter": (format) => {
+							return format.container === ytSetting.vidFormat && format.audioEncoding;
+						},
+						"quality": ytSetting.quality
+					});
+					var astream = ffmpeg(video)
+					.format(ytSetting.audioFormat)
+					.on('error', (err) => { console.log(err); });
+
+					resolve([new AudioModel({
+						"id": id, 
+						"title": info.title,
+						"audio": astream, 
+						"source": source
+					})]);
+				}
+			});
 		});
 	});
 };

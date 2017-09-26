@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const routes = require('./routes');
-routes.get('/api/health', reporter.lastError);
+routes.get('/health', reporter.lastError);
 app.use(routes);
 
 // Listen on provided port, on all network interfaces.

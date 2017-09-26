@@ -4,7 +4,7 @@ script:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - docker-compose build
   - docker images
-  - docker-compose run test_uniaudio
+  - docker-compose up
 
 after_success:
   - docker-compose push

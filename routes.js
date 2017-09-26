@@ -25,12 +25,10 @@ router.post('/search/:query', (req, res) => {
 	var audioprom;
 	switch (req.body.source) {
 		case 'youtube':
-			console.log('querying in youtube API');
 			audioprom = youtube(db.exists, query);
 			break;
 		case 'audiosearch':
 		default:
-			console.log('querying in audiosearch API');
 			audioprom = audiosearch.search_episode(db.exists, query);
 			break;
 	}
