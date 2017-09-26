@@ -1,5 +1,7 @@
 # unified-audio-service
 
+[![Build Status](https://travis-ci.org/mingkaic/unified-audio-service.svg?branch=master)](https://travis-ci.org/mingkaic/unified-audio-service)
+
 obtain audio data from multiple 3rd party API
 
 # docker
