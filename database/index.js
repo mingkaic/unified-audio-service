@@ -1,42 +1,52 @@
-require('./connect_mongo');
 const mongoose = require('mongoose');
 const grid = require('gridfs-stream');
 
+require('./connect_mongo');
+
 var AudioModel = require('../models/audio_model');
+var MongooseModel = require('./audio_mongoose');
 
 var gfs = null;
-
-var MongooseModel = require('./audio_mongoose');
 var connection = mongoose.connection;
 connection.once('connected', () => {
 	gfs = grid(connection.db, mongoose.mongo);
 });
 
 exports.save = (audios) => {
-    return audios.map((aud) => {
-        if (null === aud || !(aud instanceof AudioModel)) {
+    return Promise.all(audios.map((aud) => {
+        if (null === aud || 
+            !(aud instanceof AudioModel) ||
+            null == aud.audio) {
             return null;
         }
+
         // save to database
-        if (aud.audio) {
-            var writeStream = gfs.createWriteStream({ filename: aud.source + aud.id });
-            
-            var instance = new vidModel({
-                'id': aud.id,
-                'source': aud.source,
-                'title': aud.title
-            });
+        var writeStream = gfs.createWriteStream({ filename: aud.source + aud.id });
+        aud.audio.pipe(writeStream)
+        
+        var instance = new MongooseModel({
+            'id': aud.id,
+            'source': aud.source,
+            'title': aud.title
+        });
 
-            instance.save()
-            .then((data) => {
-                console.log('saved ', data);
+        return instance.save()
+        .then((data) => {
+            return new Promise((resolve, reject) => {
+                writeStream
+                .on('close', resolve)
+                .on('error', reject);
             });
-        }
-
-        return aud.id;
+        })
+        .then(() => {
+            console.log(aud.id, " saved");
+        });
+    }))
+    .then(() => {
+        return audios.map((aud) => aud.id);
     });
 };
 
 exports.exists = (ids) => {
-    return MongooseModel.find({ "id": ids }).exec();
+    return MongooseModel.find({ "id": { $in: ids } }).exec();
 };

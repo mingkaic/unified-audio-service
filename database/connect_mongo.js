@@ -8,7 +8,7 @@ if (process.env.NODE_ENV !== 'production') {
 const dbHost = process.env.DB_HOST || '127.0.0.1';
 
 // setup grid and mongoose
-const mongoURL = 'mongodb://' + dbHost + ':27017/' + dbName;
+const mongoURL = process.env.MONGO_URL || 'mongodb://' + dbHost + ':27017/' + dbName;
 function connect() {
 	mongoose.connect(mongoURL, { useMongoClient: true });
 	grid.mongo = mongoose.mongo;

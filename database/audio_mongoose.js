@@ -8,7 +8,7 @@ const AudSchema = new mongoose.Schema({
     "last_updated": { type: Date, default: Date.now },
 });
 
-AudSchema.pre('save', (next) => {
+AudSchema.pre('save', function (next) {
     this.update({}, {
         $set: {
             last_updated: new Date()

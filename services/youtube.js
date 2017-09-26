@@ -10,7 +10,7 @@ const ytSetting = {
 	audioFormat: 'mp3'
 };
 
-const utubeReg = /^.*youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?[\w\?=]*)?.*/;
+const utubeReg = /^.*youtu(?:be\.com\/watch\?(?:.*&)*v=|\.be\/)([\w\-\_]*)(&(amp;)?[\w\?=]*)?.*/;
 
 module.exports = (local_query, query) => {
 	var id = query;

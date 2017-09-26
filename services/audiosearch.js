@@ -6,13 +6,33 @@ var AudioModel = require('../models/audio_model');
 
 const source = ".audiosearch";
 
-exports.get_tastemaker = () =>
+function local_filter (local_query, results) {
+	var ids = results.map((info) => info.id);
+	return local_query(ids)
+	.then((docs) => {
+		var discovery = new Set(docs.map((doc) => doc.id));
+		return results.map((info) => {
+			var audio = null;
+			if (!discover.has(info.id)) {
+				var link = info.audio_files[0].url || info.audio_files[0].audiosearch_mp3;
+				audio = request.get(link);
+			}
+			return new AudioModel({
+				"id": info.id,
+				"title": info.title,
+				"audio": audio,
+				"source": source
+			});
+		});
+	});
+}
+
+exports.get_tastemaker = (local_query) =>
 {
 	return audiosearch
 	.getTastemakers()
-	.then(function (tastemakers) {
-		// filter out irrelevant data
-		return tastemakers;
+	.then((tastemakers) => {
+		return local_filter(tastemakers);
 	});
 };
 
@@ -26,31 +46,7 @@ exports.search_episode = (local_query, keyword, timeinfo) => {
 	return audiosearch
 	.searchEpisodes(keyword, params)
 	.then((results) => {
-		// parse results
 		results = results.results;
-		// check local
-		var ids = results.map((info) => info.id);
-		return local_query(ids)
-		.then((docs) => {
-			var discovery = new Set(docs.map((doc) => doc.id));
-
-			return results.map((info) => {
-				if (info.audio_files.length === 0) {
-					return null;
-				}
-				var audio = null;
-				if (!discover.has(info.id)) {
-					var link = info.audio_files[0].audiosearch_mp3;
-					audio = request.get(link);
-				}
-				// in the future, change schema here
-				return new AudioModel({
-					"id": info.id,
-					"title": info.title,
-					"audio": audio,
-					"source": source
-				});
-			});
-		})
+		return local_filter(results);
 	});
 };

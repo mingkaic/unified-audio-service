@@ -7,7 +7,7 @@ mkaichen/uni_audio:latest
 
 # sources
 
-![alt tag](https://github.com/mingkaic/unified-audio-service/blob/master/legal/audiosearch_logos/audiosearch_logo_128.png)
+![alt tag](https://github.com/mingkaic/unified-audio-service/blob/master/legal/audiosearch_logos/audiosearch_logo_64.png)
 [audiosearch](https://www.audiosear.ch/) 
 
 youtube via [ytdl-core](https://github.com/fent/node-ytdl-core)

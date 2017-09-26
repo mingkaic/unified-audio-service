@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  test_uniaudio:
+    image: mkaichen/uni_audio:latest
+    build: .
+    environment:
+      - DB_HOST=central_mongodb
+      - AUDIOSEARCH_APP_ID=$AUDIOSEARCH_APP_ID
+      - AUDIOSEARCH_SECRET=$AUDIOSEARCH_SECRET
+    command: [ "npm", "test" ]
+    depends_on: 
+      - central_mongodb
+
+  central_mongodb:
+    image: mongo:latest
+    volumes: 
+      - /data/database
+    restart: always

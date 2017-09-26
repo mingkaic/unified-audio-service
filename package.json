@@ -9,6 +9,7 @@
     "express": "^4.15.4",
     "fluent-ffmpeg": "^2.1.2",
     "gridfs-stream": "^1.1.1",
+    "mongo-clean": "^1.2.2",
     "mongoose": "^4.11.12",
     "node-health-service": "^1.0.7",
     "request": "^2.82.0",
@@ -17,10 +18,11 @@
   },
   "devDependencies": {
     "chai": "^4.1.2",
-    "mocha": "^3.5.3"
+    "mocha": "^3.5.3",
+    "uuid": "^3.1.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha tests --recursive",
     "start": "node server.js"
   },
   "repository": {
