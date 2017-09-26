@@ -6,7 +6,6 @@ const youtube = require('./services/youtube');
 const db = require('./database');
 
 router.post('/sounds', (req, res) => {
-	// todo: join data from soundcloud and serve
 	audiosearch.get_tastemaker(db.exists)
 	.then((audio) => {
 		return db.save(audio);

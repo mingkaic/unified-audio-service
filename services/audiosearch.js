@@ -15,7 +15,7 @@ function local_filter (local_query, results) {
 		return results.map((info) => {
 			var audio = null;
 			if (0 <= discovery.indexOf(info.id) || 0 === discovery.length) {
-				var link = info.audio_files[0].url || info.audio_files[0].audiosearch_mp3;
+				var link = info.audio_files[0].audiosearch_mp3 || info.audio_files[0].url[0];
 				audio = request.get(link);
 			}
 			return new AudioModel({
@@ -25,7 +25,7 @@ function local_filter (local_query, results) {
 				"source": source
 			});
 		});
-	});
+	})
 }
 
 function init () {
@@ -42,6 +42,7 @@ exports.get_tastemaker = (local_query) => {
 	return audiosearch
 	.getTastemakers()
 	.then((tastemakers) => {
+		tastemakers = tastemakers.map((tm) => tm.episode);
 		return local_filter(local_query, tastemakers);
 	});
 };

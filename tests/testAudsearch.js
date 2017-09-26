@@ -14,7 +14,7 @@ function generateAudioSamples () {
 			"id": uuidv1(),
 			"title": uuidv1(),
 			"audio_files": [
-				{'url': 'http://www.noiseaddicts.com/samples_1w72b820/280.mp3'}
+				{'audiosearch_mp3': 'http://www.noiseaddicts.com/samples_1w72b820/280.mp3'}
 			]
 		});
 	}
@@ -29,7 +29,9 @@ const searchIds = searchSamples.map((sample) => sample.id);
 
 var mockAudioSearch = {
 	"getTastemakers": () => {
-		return Promise.resolve(tastemakerSamples);
+		return Promise.resolve(tastemakerSamples.map((tm) => {
+			return { "episode": tm }
+		}));
 	},
 	"searchEpisodes": (keyword, params) => {
 		return Promise.resolve({ "results": searchSamples });
