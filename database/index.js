@@ -21,7 +21,7 @@ exports.save = (audios) => {
 		}
 
 		// save to database
-		var writeStream = gfs.createWriteStream({ filename: aud.source + aud.id });
+		var writeStream = gfs.createWriteStream({ filename: aud.id });
 		aud.audio.pipe(writeStream);
 		
 		var instance = new MongooseModel({
