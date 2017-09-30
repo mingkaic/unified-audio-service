@@ -40,8 +40,7 @@ module.exports = (local_query, query) => {
 					reject(err);
 				}
 				else {
-					var fs = require('fs');
-					var video = ytdl('https://www.youtube.com/watch?v=3tmd-ClpJxA', {
+					var video = ytdl(requestUrl, {
 						"filter": (format) => {
 							return format.container === ytSetting.vidFormat && format.audioEncoding;
 						},
