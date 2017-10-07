@@ -6,9 +6,15 @@ const youtube = require('./services/youtube');
 const db = require('./database');
 
 router.post('/sounds', (req, res) => {
-	audiosearch.get_tastemaker(db.exists)
-	.then((audio) => {
-		return db.save(audio);
+	db.popularQuery()
+	.then((ids) => {
+		if (ids.length == 0) {
+			return audiosearch.get_tastemaker(db.exists)
+			.then((audio) => {
+				return db.save(audio);
+			});
+		}
+		return ids;
 	})
 	.then((ids) => {
 		// return lookup

@@ -5,6 +5,7 @@ require('./connect_mongo');
 
 var AudioModel = require('../models/audio_model');
 var MongooseModel = require('./audio_mongoose');
+var PopularModel = require('./popular_mongoose');
 
 var gfs = null;
 var connection = mongoose.connection;
@@ -29,16 +30,16 @@ exports.save = (audios) => {
 			'source': aud.source,
 			'title': aud.title
 		});
-
-		return instance.save()
-		.then((data) => {
-			return new Promise((resolve, reject) => {
-				writeStream
-				.on('close', resolve)
-				.on('error', reject);
-			});
+		
+		return new Promise((resolve, reject) => {
+			writeStream
+			.on('close', resolve)
+			.on('error', reject);
 		})
 		.then(() => {
+			return instance.save();
+		})
+		.then((data) => {
 			console.log(aud.id, " saved");
 		});
 	}))
@@ -49,4 +50,16 @@ exports.save = (audios) => {
 
 exports.exists = (ids) => {
 	return MongooseModel.find({ "id": { $in: ids } }).exec();
+};
+
+exports.popularQuery = () => {
+	var today = Math.floor(Date.now() / 1000);
+	return PopularModel.findOne({ "date": today }).exec()
+	.then((data) => {
+		var ids = []
+		if (data) {
+			ids = data.ids;
+		}
+		return ids;
+	});
 };
