@@ -1,7 +1,7 @@
 const ytdl = require('ytdl-core');
 const ffmpeg = require('fluent-ffmpeg');
 
-const AudioModel = require('../models/audio_model');
+const AudioSchema = require('../database/_schemas/audio_schema');
 
 const source = ".youtube";
 const ytSetting = {
@@ -24,7 +24,7 @@ module.exports = (local_query, query) => {
 	.then((docs) => {
 		if (docs.length > 0) {
 			var doc = docs[0];
-			return [new AudioModel({
+			return [new AudioSchema({
 				"id": doc.id,
 				"title": doc.title,
 				"audio": null,
@@ -50,7 +50,7 @@ module.exports = (local_query, query) => {
 					.format(ytSetting.audioFormat)
 					.on('error', (err) => { console.log(err); });
 
-					resolve([new AudioModel({
+					resolve([new AudioSchema({
 						"id": id, 
 						"title": info.title,
 						"audio": astream, 

@@ -6,15 +6,22 @@ const youtube = require('./services/youtube');
 const db = require('./database');
 
 router.post('/sounds', (req, res) => {
-	db.popularQuery()
-	.then((ids) => {
-		if (ids.length == 0) {
-			return audiosearch.get_tastemaker(db.exists)
-			.then((audio) => {
-				return db.save(audio);
+	db.popularQuery() // look up popular list in db
+	.then((existing_ids) => {
+		if (existing_ids.length == 0) {
+			return audiosearch.get_tastemaker(db.audioQuery)
+			.then((audios) => {
+				return db.audioSave(audios);
+			})
+			.then((ids) => {
+				// save newly discovered popular list to db
+				return db.popularSave(ids)
+				.then(() => {
+					return ids;
+				});
 			});
 		}
-		return ids;
+		return existing_ids;
 	})
 	.then((ids) => {
 		// return lookup
@@ -30,16 +37,16 @@ router.post('/search/:query', (req, res) => {
 	var audioprom;
 	switch (req.body.source) {
 		case 'youtube':
-			audioprom = youtube(db.exists, query);
+			audioprom = youtube(db.audioQuery, query);
 			break;
 		case 'audiosearch':
 		default:
-			audioprom = audiosearch.search_episode(db.exists, query);
+			audioprom = audiosearch.search_episode(db.audioQuery, query);
 			break;
 	}
 	audioprom.then((audio) => {
 		// save to centralized database
-		return db.save(audio);
+		return db.audioSave(audio);
 	})
 	.then((ids) => {
 		// return lookup

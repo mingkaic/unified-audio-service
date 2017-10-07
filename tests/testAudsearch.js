@@ -2,7 +2,7 @@ const chai = require('chai');
 const uuidv1 = require('uuid/v1');
 
 const search = require('../services/audiosearch');
-const AudioModel = require('../models/audio_model');
+const AudioSchema = require('../database/_schemas/audio_schema');
 
 const expect = chai.expect; // we are using the "expect" style of Chai
 
@@ -43,7 +43,7 @@ describe('Audiosearch not in db', function() {
 		search.set_audiosearch(mockAudioSearch);
 	});
 
-	it('get_tastemaker should return an array of AudioModel', 
+	it('get_tastemaker should return an array of AudioSchema', 
 	function(done) {
 		search.get_tastemaker(() => {
 			return Promise.resolve([]);
@@ -52,7 +52,7 @@ describe('Audiosearch not in db', function() {
 			var n = modelArr.length;
 			expect(n).to.equal(tastemakerSamples.length);
 			for (var i = 0; i < n; i++) {
-				expect(modelArr[i]).to.be.instanceof(AudioModel);
+				expect(modelArr[i]).to.be.instanceof(AudioSchema);
 				expect(modelArr[i].id).to.equal(tastemakerSamples[i].id);
 				expect(modelArr[i].title).to.equal(tastemakerSamples[i].title);
 				expect(modelArr[i].audio).to.not.be.null;
@@ -63,7 +63,7 @@ describe('Audiosearch not in db', function() {
 		.catch(done);
 	});
 
-	it('search should return an array of AudioModel', 
+	it('search should return an array of AudioSchema', 
 	function(done) {
 		search.search_episode(() => {
 			return Promise.resolve([]);
@@ -72,7 +72,7 @@ describe('Audiosearch not in db', function() {
 			var n = modelArr.length;
 			expect(n).to.equal(searchSamples.length);
 			for (var i = 0; i < n; i++) {
-				expect(modelArr[i]).to.be.instanceof(AudioModel);
+				expect(modelArr[i]).to.be.instanceof(AudioSchema);
 				expect(modelArr[i].id).to.equal(searchIds[i]);
 				expect(modelArr[i].title).to.equal(searchSamples[i].title);
 				expect(modelArr[i].audio).to.not.be.null;
@@ -89,7 +89,7 @@ describe('Audiosearch found in db', function() {
 		search.set_audiosearch(mockAudioSearch);
 	});
 	
-	it('get_tastemaker should return an array of AudioModel', 
+	it('get_tastemaker should return an array of AudioSchema', 
 	function(done) {
 		search.get_tastemaker(() => {
 			return Promise.resolve(tastemakerIds);
@@ -98,7 +98,7 @@ describe('Audiosearch found in db', function() {
 			var n = modelArr.length;
 			expect(n).to.equal(tastemakerSamples.length);
 			for (var i = 0; i < n; i++) {
-				expect(modelArr[i]).to.be.instanceof(AudioModel);
+				expect(modelArr[i]).to.be.instanceof(AudioSchema);
 				expect(modelArr[i].id).to.equal(tastemakerSamples[i].id);
 				expect(modelArr[i].title).to.equal(tastemakerSamples[i].title);
 				if (null !== modelArr[i].audio) {
@@ -113,7 +113,7 @@ describe('Audiosearch found in db', function() {
 		.catch(done);
 	});
 
-	it('search should return an array of AudioModel', 
+	it('search should return an array of AudioSchema', 
 	function(done) {
 		search.search_episode(() => {
 			return Promise.resolve(searchIds);
@@ -122,7 +122,7 @@ describe('Audiosearch found in db', function() {
 			var n = modelArr.length;
 			expect(n).to.equal(searchSamples.length);
 			for (var i = 0; i < n; i++) {
-				expect(modelArr[i]).to.be.instanceof(AudioModel);
+				expect(modelArr[i]).to.be.instanceof(AudioSchema);
 				expect(modelArr[i].id).to.equal(searchIds[i]);
 				expect(modelArr[i].title).to.equal(searchSamples[i].title);
 				expect(modelArr[i].audio).to.be.null;

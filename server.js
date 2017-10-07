@@ -23,5 +23,5 @@ app.use(routes);
 
 // Listen on provided port, on all network interfaces.
 server.listen(port, default_host, () => {
-	console.log(`unified-audio API running on localhost:${port}`)
+	console.log(`unified-audio API running on localhost:${port}`);
 });

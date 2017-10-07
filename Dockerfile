@@ -9,9 +9,6 @@ WORKDIR $AUD_DIR
 # move everything
 COPY . $AUD_DIR
 
-RUN apt-get update && \
-    apt-get install -y ffmpeg
-
-RUN npm install
+RUN bash setup.sh
 
 CMD [ "npm", "start" ]

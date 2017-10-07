@@ -1,7 +1,7 @@
 const request = require('request');
 const Audiosearch = require('audiosearch-client-node');
 
-const AudioModel = require('../models/audio_model');
+const AudioSchema = require('../database/_schemas/audio_schema');
 
 var audiosearch;
 
@@ -9,7 +9,7 @@ const source = ".audiosearch";
 
 function local_filter (local_query, results) {
 	var ids = results.map((info) => info.id);
-	return local_query(ids)
+	return local_query({ "id": { $in: ids } })
 	.then((docs) => {
 		var discovery = docs.map((doc) => doc.id);
 		return results.map((info) => {
@@ -18,7 +18,7 @@ function local_filter (local_query, results) {
 				var link = info.audio_files[0].audiosearch_mp3 || info.audio_files[0].url[0];
 				audio = request.get(link);
 			}
-			return new AudioModel({
+			return new AudioSchema({
 				"id": info.id,
 				"title": info.title,
 				"audio": audio,
