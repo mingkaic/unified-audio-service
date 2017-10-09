@@ -9,6 +9,8 @@ WORKDIR $AUD_DIR
 # move everything
 COPY . $AUD_DIR
 
+EXPOSE 3124
+
 RUN bash setup.sh
 
 CMD [ "npm", "start" ]
