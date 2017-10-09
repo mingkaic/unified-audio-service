@@ -11,6 +11,7 @@ const testURL = 'https://www.youtube.com/watch?v=';
 describe('Youtube not in db', function() {
 	it('should return an array of a single AudioSchema', 
 	function(done) {
+		this.timeout = 5000;
 		youtube(() => {
 			return Promise.resolve([]);
 		}, testURL + testId)
@@ -28,6 +29,7 @@ describe('Youtube not in db', function() {
 describe('Youtube found in db', function() {
 	it('should return an array of a single AudioSchema with null audio', 
 	function(done) {
+		this.timeout = 5000;
 		youtube(() => {
 			return Promise.resolve([testId]);
 		}, testURL + testId)

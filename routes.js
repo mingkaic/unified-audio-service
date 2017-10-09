@@ -5,10 +5,10 @@ const audiosearch = require('./services/audiosearch');
 const youtube = require('./services/youtube');
 const db = require('./database');
 
-router.post('/sounds', (req, res) => {
+router.post('/popular', (req, res) => {
 	db.popularQuery() // look up popular list in db
 	.then((existing_ids) => {
-		if (existing_ids.length == 0) {
+		if (existing_ids.length === 0) {
 			return audiosearch.get_tastemaker(db.audioQuery)
 			.then((audios) => {
 				return db.audioSave(audios);
