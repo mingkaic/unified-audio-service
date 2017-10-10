@@ -9,7 +9,7 @@ WORKDIR $AUD_DIR
 # move everything
 COPY . $AUD_DIR
 
-EXPOSE 3124
+EXPOSE 8080
 
 RUN bash setup.sh
 
