@@ -20,7 +20,7 @@ module.exports = (local_query, query) => {
 	// otherwise assume query is in id form
 
 	// search local db
-	return local_query(id)
+	return local_query({ "id": id })
 	.then((docs) => {
 		if (docs.length > 0) {
 			var doc = docs[0];

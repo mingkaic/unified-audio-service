@@ -44,9 +44,9 @@ router.post('/search/:query', (req, res) => {
 			audioprom = audiosearch.search_episode(db.audioQuery, query);
 			break;
 	}
-	audioprom.then((audio) => {
+	audioprom.then((audios) => {
 		// save to centralized database
-		return db.audioSave(audio);
+		return db.audioSave(audios);
 	})
 	.then((ids) => {
 		// return lookup
