@@ -14,10 +14,11 @@ router.get('/caption/:id', (req, res) => {
 		}
 		else {
 			switch (info[0].source) {
-				case 'audiosearch':
+				case '.audiosearch':
 					// todo: implement
+					res.status(404).json({ "err": "caption not found" });
 					break;
-				case 'youtube':
+				case '.youtube':
 					youtube.get_caption(id)
 					.then((caption) => {
 						res.json(caption);
