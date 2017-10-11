@@ -5,6 +5,32 @@ const audiosearch = require('./services/audiosearch');
 const youtube = require('./services/youtube');
 const db = require('./database');
 
+router.get('/caption/:id', (req, res) => {
+	var id = req.params.id;
+	db.audioQuery({"id": id})
+	.then((info) => {
+		if (info.length === 0) {
+			res.status(404).json({ "err": id + " audio not found" });
+		}
+		else {
+			switch (info[0].source) {
+				case 'audiosearch':
+					// todo: implement
+					break;
+				case 'youtube':
+					youtube.get_caption(id)
+					.then((caption) => {
+						res.json(caption);
+					})
+					.catch((err) => {
+						res.status(404).json({ "err": err });
+					});
+					break;
+			}
+		}
+	});
+});
+
 router.post('/popular', (req, res) => {
 	db.popularQuery() // look up popular list in db
 	.then((existing_ids) => {
@@ -37,7 +63,7 @@ router.post('/search/:query', (req, res) => {
 	var audioprom;
 	switch (req.body.source) {
 		case 'youtube':
-			audioprom = youtube(db.audioQuery, query);
+			audioprom = youtube.get_audio(db.audioQuery, query);
 			break;
 		case 'audiosearch':
 		default:

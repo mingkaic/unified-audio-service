@@ -12,7 +12,7 @@ describe('Youtube not in db', function() {
 	it('should return an array of a single AudioSchema', 
 	function(done) {
 		this.timeout = 5000;
-		youtube(() => {
+		youtube.get_audio (() => {
 			return Promise.resolve([]);
 		}, testURL + testId)
 		.then((modelArr) => {
@@ -30,7 +30,7 @@ describe('Youtube found in db', function() {
 	it('should return an array of a single AudioSchema with null audio', 
 	function(done) {
 		this.timeout = 5000;
-		youtube(() => {
+		youtube.get_audio (() => {
 			return Promise.resolve([testId]);
 		}, testURL + testId)
 		.then((modelArr) => {

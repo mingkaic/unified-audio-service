@@ -1,7 +1,11 @@
+const request = require('request-promise');
 const ytdl = require('ytdl-core');
 const ffmpeg = require('fluent-ffmpeg');
+const parseString = require('xml2js').parseString;
+const Entities = require('html-entities').XmlEntities;
 
 const AudioSchema = require('../database/_schemas/audio_schema');
+const entities = new Entities();
 
 const source = ".youtube";
 const ytSetting = {
@@ -12,7 +16,12 @@ const ytSetting = {
 
 const utubeReg = /^.*youtu(?:be\.com\/watch\?(?:.*&)*v=|\.be\/)([\w\-\_]*)(&(amp;)?[\w\?=]*)?.*/;
 
-module.exports = (local_query, query) => {
+function xmlfilter(str) {
+	var clean = str.replace(/<[^>]*>/g, "");
+	return entities.decode(clean);
+}
+
+exports.get_audio = (local_query, query) => {
 	var id = query;
 	if (utubeReg.test(query)) { // if query is in youtube.com form
 		id = utubeReg.exec(query)[1];
@@ -59,5 +68,71 @@ module.exports = (local_query, query) => {
 				}
 			});
 		});
+	});
+};
+
+// untested
+exports.get_caption = (id) => {
+	const requestUrl = 'http://www.youtube.com/watch?v=' + id;
+	return new Promise((resolve, reject) => {
+		ytdl.getInfo(requestUrl, (err, info) => {
+			if (info.player_response && info.player_response.captions) {
+				var caption = info.
+					player_response.
+					captions.
+					playerCaptionsTracklistRenderer.
+					captionTracks[0];
+				resolve(caption.baseUrl);
+			}
+			reject("caption not found");
+		});
+	})
+	.then((url) => {
+		return request({
+			"encoding": 'utf8',
+			"method": 'GET',
+			"uri": url,
+			"json": true
+		});
+	})
+	.then((response) => {
+		return new Promise((resolve, reject) => {
+			parseString(response, (err, result) => {
+				if (err) {
+					reject(err);
+				}
+				resolve(result);
+			});
+		});
+	})
+	.then((data) => {
+		var texts = data.transcript.text;
+		var transcript = [];
+		texts.forEach((block, i) => {
+			var time = block['$'];
+			var start = parseFloat(time.start);
+			var duration = parseFloat(time.dur);
+			if (i + 1 < texts.length) {
+				next_block = texts[i + 1];
+				duration = Math.min(duration, parseFloat(next_block['$'].start) - start);
+			}
+
+			var words = xmlfilter(block['_']).split(' ');
+			var est_syllables = words.map((word) => 1 + Math.floor(word.length / 5));
+			var dur_per_syll = est_syllables.reduce((acc, v) => acc + v) / duration;
+			var est_dur = est_syllables.map((n_syll) => n_syll * dur_per_syll);
+			var wordInfos = words.map((word, i) => {
+				var end = start + est_dur[i];
+				var info = {
+					"word": word,
+					"start": start,
+					"end": end,
+				};
+				start = end;
+				return info;
+			});
+			transcript = transcript.concat(wordInfos);
+		});
+		return transcript;
 	});
 };

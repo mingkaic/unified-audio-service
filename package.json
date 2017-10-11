@@ -9,12 +9,15 @@
     "express": "^4.15.4",
     "fluent-ffmpeg": "^2.1.2",
     "gridfs-stream": "^1.1.1",
+    "html-entities": "^1.2.1",
     "mongoose": "^4.11.12",
     "node-health-service": "^1.0.7",
     "request": "^2.82.0",
+    "request-promise": "^4.2.2",
     "schema-object": "^4.0.11",
-    "ytdl-core": "^0.17.1",
-    "uuid": "^3.1.0"
+    "uuid": "^3.1.0",
+    "xml2js": "^0.4.19",
+    "ytdl-core": "^0.17.1"
   },
   "devDependencies": {
     "chai": "^4.1.2",
