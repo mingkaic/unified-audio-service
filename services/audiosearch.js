@@ -25,7 +25,7 @@ function local_filter (local_query, results) {
 				"source": source
 			});
 		});
-	})
+	});
 }
 
 function init () {

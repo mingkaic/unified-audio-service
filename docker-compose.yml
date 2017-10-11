@@ -8,18 +8,14 @@ services:
       - AUDIOSEARCH_APP_ID=$AUDIOSEARCH_APP_ID
       - AUDIOSEARCH_SECRET=$AUDIOSEARCH_SECRET
     ports:
-      - '3124:3124'
+      - '8080:8080'
     depends_on: 
       - centralmongodb
 
   uniaudio-test:
     image: mkaichen/uni_audio:latest
     build: .
-    environment:
-      - DB_HOST=centralmongodb
     command: [ "npm", "test" ]
-    depends_on: 
-      - centralmongodb
 
   centralmongodb:
     image: mongo:latest
