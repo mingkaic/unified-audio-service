@@ -18,7 +18,7 @@ const utubeReg = /^.*youtu(?:be\.com\/watch\?(?:.*&)*v=|\.be\/)([\w\-\_]*)(&(amp
 
 function xmlfilter(str) {
 	var clean = str.replace(/<[^>]*>/g, "");
-	return entities.decode(clean.replace(/\W/g, ""));
+	return entities.decode(clean.replace(/[^\S ]+/g, ""));
 }
 
 exports.get_audio = (local_query, query) => {

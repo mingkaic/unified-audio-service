@@ -57,4 +57,10 @@ typings/
 # dotenv environment variables file
 .env
 
+.*
+
+!.gitignore
+!.dockerignore
+!.travis.yml
+
 database
