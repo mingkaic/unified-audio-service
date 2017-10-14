@@ -130,7 +130,7 @@ exports.get_caption = (id) => {
 			});
 
 			var est_syllables = words.map((word) => 1 + Math.floor(word.length / 5));
-			var dur_per_syll = est_syllables.reduce((acc, v) => acc + v) / duration;
+			var dur_per_syll = duration / est_syllables.reduce((acc, v) => acc + v, 0);
 			var est_dur = est_syllables.map((n_syll) => n_syll * dur_per_syll);
 			var wordInfos = words.map((word, i) => {
 				var end = start + est_dur[i];
