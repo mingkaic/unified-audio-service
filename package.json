@@ -12,6 +12,7 @@
     "html-entities": "^1.2.1",
     "mongoose": "^4.11.12",
     "node-health-service": "^1.0.7",
+    "number-to-words": "^1.2.3",
     "request": "^2.82.0",
     "request-promise": "^4.2.2",
     "schema-object": "^4.0.11",

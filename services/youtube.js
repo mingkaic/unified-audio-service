@@ -1,6 +1,7 @@
 const request = require('request-promise');
 const ytdl = require('ytdl-core');
 const ffmpeg = require('fluent-ffmpeg');
+const numconverter = require('number-to-words');
 const parseString = require('xml2js').parseString;
 const Entities = require('html-entities').XmlEntities;
 
@@ -117,7 +118,17 @@ exports.get_caption = (id) => {
 				duration = Math.min(duration, parseFloat(next_block['$'].start) - start);
 			}
 
-			var words = xmlfilter(block['_']).split(' ');
+			var potentialwords = xmlfilter(block['_']).split(' ');
+			var words = [];
+			potentialwords.forEach((potword) => {
+				if (isNaN(potword)) {
+					words.push(potword);
+				}
+				else {
+					words = words.concat(numconverter.toWords(potword).split(' '));
+				}
+			});
+
 			var est_syllables = words.map((word) => 1 + Math.floor(word.length / 5));
 			var dur_per_syll = est_syllables.reduce((acc, v) => acc + v) / duration;
 			var est_dur = est_syllables.map((n_syll) => n_syll * dur_per_syll);
