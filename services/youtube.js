@@ -4,6 +4,9 @@ const ffmpeg = require('fluent-ffmpeg');
 const numconverter = require('number-to-words');
 const parseString = require('xml2js').parseString;
 const Entities = require('html-entities').XmlEntities;
+const hype = require('hypher');
+
+const hypher = new hype(require('hyphenation.en-us'));
 
 const AudioSchema = require('../database/_schemas/audio_schema');
 const entities = new Entities();
@@ -129,7 +132,9 @@ exports.get_caption = (id) => {
 				}
 			});
 
-			var est_syllables = words.map((word) => 1 + Math.floor(word.length / 5));
+			var est_syllables = words.map((word) => {
+				return hypher.hyphenate(word).length;
+			});
 			var dur_per_syll = duration / est_syllables.reduce((acc, v) => acc + v, 0);
 			var est_dur = est_syllables.map((n_syll) => n_syll * dur_per_syll);
 			var wordInfos = words.map((word, i) => {
