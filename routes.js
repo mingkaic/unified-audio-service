@@ -33,22 +33,9 @@ router.get('/caption/:id', (req, res) => {
 });
 
 router.post('/popular', (req, res) => {
-	db.popularQuery() // look up popular list in db
-	.then((existing_ids) => {
-		if (existing_ids.length === 0) {
-			return audiosearch.get_tastemaker(db.audioQuery)
-			.then((audios) => {
-				return db.audioSave(audios);
-			})
-			.then((ids) => {
-				// save newly discovered popular list to db
-				return db.popularSave(ids)
-				.then(() => {
-					return ids;
-				});
-			});
-		}
-		return existing_ids;
+	return audiosearch.get_tastemaker(db.audioQuery)
+	.then((audios) => {
+		return db.audioSave(audios);
 	})
 	.then((ids) => {
 		// return lookup
