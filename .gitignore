@@ -62,5 +62,3 @@ typings/
 !.gitignore
 !.dockerignore
 !.travis.yml
-
-database
