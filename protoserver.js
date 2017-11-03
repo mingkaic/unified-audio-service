@@ -84,8 +84,9 @@ const PROTO_DIR = __dirname + '/grpc/_proto';
 const MAIN_PROTO_PATH = PROTO_DIR + '/uas.proto';
 const HEALTH_PROTO_PATH = PROTO_DIR + '/health.proto';
 
-const uas_proto = grpc.load(UAS_PROTO_PATH).uas;
+const uas_proto = grpc.load(MAIN_PROTO_PATH).uas;
 const health_proto = grpc.load(HEALTH_PROTO_PATH).health;
+const credentials = grpc.ServerCredentials.createInsecure();
 
 const port = process.env.PORT || '8080';
 const uri = '0.0.0.0:' + port;
@@ -104,3 +105,7 @@ server.addService(uas_proto.UnifiedAudioService.service, {
 server.addService(health_proto.HealthService.service, {
 	"lastError": lastError
 }); // health service
+
+server.bind(uri, credentials);
+server.start();
+console.log('listening on port', port);

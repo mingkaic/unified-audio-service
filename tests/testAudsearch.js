@@ -2,8 +2,8 @@ const chai = require('chai');
 const uuidv1 = require('uuid/v1');
 
 const search = require('../services/audiosearch');
-const AudioSchema = require('../database/_schemas/audio_schema');
 
+const AudioSchema = require('shared_mongodb_api').AudioSchema;
 const expect = chai.expect; // we are using the "expect" style of Chai
 
 function generateAudioSamples () {

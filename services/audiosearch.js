@@ -1,7 +1,7 @@
 const request = require('request');
 const Audiosearch = require('audiosearch-client-node');
 
-const AudioSchema = require('../database/_schemas/audio_schema');
+const AudioSchema = require('shared_mongodb_api').AudioSchema;
 
 var audiosearch;
 

@@ -1,8 +1,8 @@
 const chai = require('chai');
+
 const youtube = require('../services/youtube');
 
-const AudioSchema = require('../database/_schemas/audio_schema');
-
+const AudioSchema = require('shared_mongodb_api').AudioSchema;
 const expect = chai.expect; // we are using the "expect" style of Chai
 
 const testId = 'guATTI5NtyA';

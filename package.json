@@ -5,29 +5,21 @@
   "main": "server.js",
   "dependencies": {
     "audiosearch-client-node": "^1.0.1",
-    "body-parser": "^1.18.2",
-    "express": "^4.15.4",
     "fluent-ffmpeg": "^2.1.2",
-    "gridfs-stream": "^1.1.1",
     "html-entities": "^1.2.1",
-    "hyphen": "^1.0.2",
-    "hyphenation.en-us": "^0.2.1",
     "hypher": "^0.2.5",
-    "mongoose": "^4.11.12",
-    "node-health-service": "^1.0.7",
+    "hyphenation.en-us": "^0.2.1",
     "number-to-words": "^1.2.3",
     "request": "^2.82.0",
     "request-promise": "^4.2.2",
-    "schema-object": "^4.0.11",
-    "shared_grpc": "file:grpc",
-    "shared_mongodb_api": "file:database",
+    "shared_grpc": "git+https://git@github.com/mingkaic/shared_grpc.git",
+    "shared_mongodb_api": "git+https://git@github.com/mingkaic/shared_mongodb_api.git",
     "uuid": "^3.1.0",
     "xml2js": "^0.4.19",
     "ytdl-core": "^0.17.1"
   },
   "devDependencies": {
     "chai": "^4.1.2",
-    "fake-stream": "^0.1.1",
     "mocha": "^3.5.3"
   },
   "scripts": {
