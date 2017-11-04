@@ -11,7 +11,7 @@ const AudioSchema = require('shared_mongodb_api').AudioSchema;
 
 const entities = new Entities();
 
-const source = ".youtube";
+const source = 'YOUTUBE';
 const ytSetting = {
 	vidFormat: 'mp4',
 	quality: 'lowest',

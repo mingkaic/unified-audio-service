@@ -5,7 +5,7 @@ const AudioSchema = require('shared_mongodb_api').AudioSchema;
 
 var audiosearch;
 
-const source = ".audiosearch";
+const source = 'AUDIOSEARCH';
 
 function local_filter (local_query, results) {
 	var ids = results.map((info) => info.id);

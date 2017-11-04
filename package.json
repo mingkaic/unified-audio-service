@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "obtain audio data from multiple 3rd party API",
   "main": "server.js",
+  "directories": {
+    "legal": "legal",
+    "services": "services",
+    "tests": "tests"
+  },
   "dependencies": {
     "audiosearch-client-node": "^1.0.1",
     "fluent-ffmpeg": "^2.1.2",

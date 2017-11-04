@@ -45,7 +45,7 @@ describe('Audiosearch not in db', function() {
 
 	it('get_tastemaker should return an array of AudioSchema', 
 	function(done) {
-		this.timeout = 5000;
+		this.timeout = 7000;
 		search.get_tastemaker(() => {
 			return Promise.resolve([]);
 		})
@@ -66,7 +66,7 @@ describe('Audiosearch not in db', function() {
 
 	it('search should return an array of AudioSchema', 
 	function(done) {
-		this.timeout = 5000;
+		this.timeout = 7000;
 		search.search_episode(() => {
 			return Promise.resolve([]);
 		}, keyword)
@@ -93,7 +93,7 @@ describe('Audiosearch found in db', function() {
 	
 	it('get_tastemaker should return an array of AudioSchema', 
 	function(done) {
-		this.timeout = 5000;
+		this.timeout = 7000;
 		search.get_tastemaker(() => {
 			return Promise.resolve(tastemakerIds);
 		})
@@ -118,7 +118,7 @@ describe('Audiosearch found in db', function() {
 
 	it('search should return an array of AudioSchema', 
 	function(done) {
-		this.timeout = 5000;
+		this.timeout = 7000;
 		search.search_episode(() => {
 			return Promise.resolve(searchIds);
 		}, keyword)
