@@ -7,11 +7,10 @@ const youtube = require('./services/youtube');
 const audDb = db.audio;
 
 exports.getCaption = (call) => {
-	console.log(call.request);
 	var id = call.request.id;
 	audDb.query({"id": id})
 	.then((info) => {
-		if (info[0].source != 'YOUTUBE' || info.length === 0) {
+		if ((info[0] && info[0].source !== 'YOUTUBE') || info.length === 0) {
 			call.end();
 		}
 		else {
@@ -37,10 +36,22 @@ exports.getCaption = (call) => {
 };
 
 exports.getPopular = (call) => {
-	console.log(call.request);
 	audiosearch.get_tastemaker(audDb.query)
 	.then((audios) => {
-		audDb.save(audios, call.write, call.end);
+		audDb.save(audios, 
+		(audio) => {
+			call.write({
+				"id": audio.id,
+				"title": audio.title,
+				"source": audio.source
+			});
+		},
+		(err) => {
+			if (err) {
+				throw err;
+			}
+			call.end();
+		});
 	})
 	.catch((err) => {
 		grpc.logError(500, err);
@@ -49,7 +60,6 @@ exports.getPopular = (call) => {
 };
 
 exports.search = (call) => {
-	console.log(call.request);
 	var query = call.request.query;
 	var response_limit = call.request.response_limit;
 	var audioprom = null;
@@ -64,7 +74,20 @@ exports.search = (call) => {
 	if (audioprom) {
 		audioprom.then((audios) => {
 			// save to centralized database
-			audDb.save(audios, call.write, call.end);
+			audDb.save(audios, 
+			(audio) => {
+				call.write({
+					"id": audio.id,
+					"title": audio.title,
+					"source": audio.source
+				});
+			}, 
+			(err) => {
+				if (err) {
+					throw err;
+				}
+				call.end();
+			});
 		})
 		.catch((err) => {
 			grpc.logError(500, err);

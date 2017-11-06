@@ -54,11 +54,9 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env
-
 .*
 
 !.gitignore
 !.dockerignore
 !.travis.yml
+!.env # allow env file for test, since we're not deploying in this project
